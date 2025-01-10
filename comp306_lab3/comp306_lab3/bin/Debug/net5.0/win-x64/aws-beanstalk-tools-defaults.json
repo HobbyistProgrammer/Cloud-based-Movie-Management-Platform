@@ -1,0 +1,21 @@
+
+{
+    "region" : "us-east-1",
+    "configuration" : "Debug",
+    "framework"     : "net5.0",
+    "self-contained" : true,
+    "application"    : "comp306lab3",
+    "environment"    : "comp306lab3-test",
+    "app-path"       : "/",
+    "iis-website"    : "Default Web Site",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-0f3f7926e14c5fdce\";\"aws:ec2:vpc,Subnets\"=\"subnet-0104c910a7667cd8f\"",
+    "solution-stack"       : "64bit Windows Server Core 2016 v2.15.6 running IIS 10.0",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "comp306bentondemolab3-test",
+    "instance-type"        : "t2.micro",
+    "key-pair"             : "key_gmail_college",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role"
+}

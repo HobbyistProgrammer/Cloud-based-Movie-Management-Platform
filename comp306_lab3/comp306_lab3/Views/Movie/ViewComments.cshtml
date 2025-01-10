@@ -1,0 +1,60 @@
+﻿@model comp306_lab3.Models.CombinedMovieCommentModel
+
+@{ var currentUserId = Model.movieModel.User_Uploaded;
+    DateTime currentTime = DateTime.Now;
+}
+
+<div>
+    <h4>Movie Details</h4>
+    <hr />
+    <dl class="row">
+        <div>
+            <h4>@Model.movieModel.Title</h4>
+            <p>Genre: @Model.movieModel.Genre</p>
+            <p>Rating: @Model.movieModel.Rating</p>
+            <p>Duration: @Model.movieModel.Duration minutes</p>
+            <p>Director: @Model.movieModel.Director</p>
+        </div>
+    </dl>
+</div>
+
+<hr />
+
+<h4>Comments</h4>
+@if (Model.commentModel != null && Model.commentModel.Any())
+{
+    <ul>
+        @foreach (var comment in Model.commentModel)
+        {
+            <li>
+                 This is @comment.Comment_User - @comment.Id: @comment.Comment (Posted on @comment.Comment_Time)
+                 @if (comment.Comment_User == currentUserId && (currentTime - DateTime.Parse(comment.Comment_Time)).TotalHours <= 24)
+                 {
+                    <form asp-action="UpdateComment" method="post" style="display:inline;">
+                        <input type="hidden" name="CommentId" value="@comment.Id" />
+                        <input type="hidden" name="CommentUser" value="@comment.Comment_User" />
+                        <input type="hidden" name="MovieId" value="@Model.movieModel.Id" />
+                        <input type="text" name="UpdatedComment" value="@comment.Comment" class="form-control" />
+                        <button type="submit" class="btn btn-warning">Update</button>
+                    </form>
+                  }
+            </li>
+        }
+    </ul> 
+}
+else
+{
+    <p>No comments available for this movie.</p>
+}
+
+<form asp-action="PostComment" method="post">
+    <input type="hidden" name="MovieId" value="@Model.movieModel.Id" />
+    <div class="form-group">
+        <label for="comment">Leave a comment:</label>
+        <textarea name="Content" class="form-control" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Post Comment</button>
+</form>
+
+<a asp-action="Index" class="btn btn-secondary">Back to Movie List</a>
+

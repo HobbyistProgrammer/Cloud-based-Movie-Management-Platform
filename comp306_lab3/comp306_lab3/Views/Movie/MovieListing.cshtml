@@ -1,0 +1,70 @@
+﻿@model comp306_lab3.Models.CombinedMovieUserModel
+
+<div>
+    <h2>Hello @Model.userModel.Username</h2>
+    <h4>Movie Listing</h4>
+    <hr />
+    <h4>Filter Movies</h4>
+
+    <form asp-action="FilteredMovieList" method="get" class="mb-3">
+        <button type="submit" name="genre" value="Action" class="btn btn-info">Action</button>
+        <button type="submit" name="genre" value="Thriller" class="btn btn-info">Thriller</button>
+        <button type="submit" name="genre" value="Horror" class="btn btn-info">Horror</button>
+        <button type="submit" name="genre" value="All" class="btn btn-info">All Genres</button>
+    </form>
+
+    <form asp-action="FilteredMovieList" method="get" class="mb-3">
+        <button type="submit" name="rating" value="5" class="btn btn-warning">Rating 5+</button>
+        <button type="submit" name="rating" value="7" class="btn btn-warning">Rating 7+</button>
+        <button type="submit" name="rating" value="9" class="btn btn-warning">Rating 9+</button>
+        <button type="submit" name="rating" value="All" class="btn btn-warning">All Ratings</button>
+    </form>
+
+    <div>
+        @Html.ActionLink("Add Movie", "Create", null, new { @class = "btn btn-primary" })
+    </div>
+    @if (Model.movieModel != null && Model.movieModel.Any())
+    {
+        foreach (var movie in Model.movieModel)
+        {
+            <div class="movie-item">
+                <h5>@movie.Title</h5>
+                <br />
+                @if (movie.User_Uploaded == Model.userModel.Id)
+                {
+                    <div>
+                        @Html.ActionLink("Edit", "Edit", new { id = movie.Id }) |
+                        <form asp-action="DeleteMovie" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@movie.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                }
+                <p><strong>Genre:</strong> @movie.Genre</p>
+                <p><strong>Director:</strong> @movie.Director</p>
+                <p><strong>Release Time:</strong> @movie.Release_Date</p>
+                <p><strong>Duration:</strong> @movie.Duration minutes</p>
+                <p><strong>Rating:</strong> @movie.Rating</p>
+                <table>
+                    <tr>
+                        <td>
+                            <form asp-action="DownloadMovie" method="get">
+                                <input type="hidden" name="fileName" value="@movie.Title" />
+                                <button type="submit" class="btn btn-primary">Download</button>
+                            </form>
+                        </td>
+                        <td>
+                            <a asp-action="MovieComments" asp-route-movieId="@movie.Id" class="btn btn-info">View Comments</a>
+                        </td>
+                    </tr>
+                </table>
+                <hr />
+            </div>
+        }
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+     }
+     else
+     {
+         <p>No movies found.</p>
+     }
+</div>
